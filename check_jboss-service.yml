@@ -1,0 +1,21 @@
+- name: Find out if Jboss is installed
+  hosts: all
+  gather_facts:
+  strategy: free
+  tasks:
+  - name: Find Jboss if installed using PowerShell
+    ansible.windows.win_powershell:
+      script: |
+       # Check if JBoss (WildFly) is installed
+        $wildflyPath = "C:\wildfly"  # Adjust the installation path as needed
+        if (Test-Path -Path $wildflyPath -PathType Container) {
+          Write-Host "JBoss (WildFly) is installed at: $wildflyPath"
+        } else {
+          Write-Host "JBoss (WildFly) is not installed."
+        } 
+    register: show_hits
+
+  - name: Show hits variable
+    debug:
+      msg: "{{ show_hits.output }}"
+    when: show_hits.output

@@ -1,0 +1,25 @@
+- name: Find out if Jboss is installed
+  hosts: all
+  gather_facts:
+  strategy: free
+  tasks:
+  - name: Find Jboss if installed using PowerShell
+    ansible.windows.win_powershell:
+      script: |
+        $serviceName = "WildFly"  # Adjust the service name as needed
+        $serviceStatus = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+        if ($serviceStatus) {
+            if ($serviceStatus.Status -eq "Running") {
+                Write-Host "JBoss (WildFly) service is currently running."
+        } else {
+        Write-Host "JBoss (WildFly) service is installed but not running."
+          }
+        } else {
+          Write-Host "JBoss (WildFly) service is not installed."
+        }
+    register: show_hits
+
+  - name: Show hits variable
+    debug:
+      msg: "{{ show_hits.output }}"
+    when: show_hits.output
