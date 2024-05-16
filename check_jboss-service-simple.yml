@@ -3,7 +3,7 @@
   gather_facts:
   strategy: free
   tasks:
-  - name: Find Jboss if installed using PowerShell
+  - name: Look for Jboss service
     ansible.windows.win_service_info:
       name: WildFly
     register: show_hits
