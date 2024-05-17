@@ -23,6 +23,7 @@
           - 'jboss*'
           - 'JBoss*'
           - 'wildfly*'
+          - 'EAP*'
       register: find_results
       loop: "{{ drives }}"
       loop_control:
