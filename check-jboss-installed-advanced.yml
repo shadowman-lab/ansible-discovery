@@ -43,3 +43,7 @@
           - jboss_locations | length > 0
         fail_msg: "JBoss is not installed on any drive."
         success_msg: "JBoss is installed on the following paths: {{ jboss_locations }}"
+      register: result
+    - name: Display result
+      ansible.builtin.debug:
+        var: result
