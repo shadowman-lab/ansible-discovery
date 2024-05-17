@@ -11,6 +11,6 @@
   - name: Show hits variable
     debug:
       var: show_hits 
-    when: show_hits.services
+    #when: show_hits.services
 #      msg: "{{ show_hits.services }}"
 #    when: show_hits.services
