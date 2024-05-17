@@ -21,6 +21,7 @@
         recurse: yes
         patterns:
           - 'jboss*'
+          - 'JBoss*'
           - 'wildfly*'
       register: find_results
       loop: "{{ drives }}"
