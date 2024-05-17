@@ -5,7 +5,7 @@
   tasks:
   - name: Look for Jboss service
     ansible.windows.win_service_info:
-      name: WildFly
+      name: JBoss* 
     register: show_hits
 
   - name: Show hits variable
