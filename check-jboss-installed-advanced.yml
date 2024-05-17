@@ -1,0 +1,43 @@
+---
+- name: Check for JBoss installation on Windows drives
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Get all logical drives
+      win_command: wmic logicaldisk get name
+      register: drives_output
+
+    - name: Parse logical drives
+      set_fact:
+        drives: "{{ drives_output.stdout_lines | select('match', '^[A-Z]:') | list }}"
+
+    - name: Initialize result list
+      set_fact:
+        jboss_locations: []
+
+    - name: Check each drive for JBoss
+      win_find:
+        paths: "{{ item }}"
+        recurse: yes
+        patterns:
+          - 'jboss*'
+          - 'wildfly*'
+      register: find_results
+      loop: "{{ drives }}"
+      loop_control:
+        label: "{{ item }}"
+
+    - name: Gather JBoss installation paths
+      set_fact:
+        jboss_locations: "{{ jboss_locations + [ item.files | map(attribute='path') | list ] | flatten }}"
+      with_items: "{{ find_results.results }}"
+    - name: Display JBoss installation paths
+      debug:
+        msg: "{{ jboss_locations }}"
+
+    - name: Check if JBoss is installed
+      assert:
+        that:
+          - jboss_locations | length > 0
+        fail_msg: "JBoss is not installed on any drive."
+        success_msg: "JBoss is installed on the following paths: {{ jboss_locations }}"
