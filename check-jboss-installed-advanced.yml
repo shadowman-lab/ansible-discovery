@@ -44,6 +44,12 @@
         fail_msg: "JBoss is not installed on any drive."
         success_msg: "JBoss is installed on the following paths: {{ jboss_locations }}"
       register: result
-    - name: Display result
-      ansible.builtin.debug:
-        var: result
+
+    - name: Get CPU information from Windows server that has JBoss installed
+      debug:
+        msg: "Number of CPUs: {{ ansible_processor_cores }}"
+      when: "{{ 'JBoss' in result.msg }}"
+    
+    #- name: Display result
+    #  ansible.builtin.debug:
+    #    var: result
